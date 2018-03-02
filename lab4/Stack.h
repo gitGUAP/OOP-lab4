@@ -1,20 +1,30 @@
 #pragma once
 
 #include <memory>
+#include <stdexcept>
 
 template <typename T> class Stack {
 public:
-	Stack() { arr = std::make_unique<int[]>(10); }
+  Stack() { arr = std::make_unique<T[]>(size); }
 
-	void push(T i) {
-		arr[idx++] = i;
-	}
+  void push(T i) {
+    if (idx == size) {
+      throw std::runtime_error("stack overflow");
+    }
 
-	T pop() {
-		return arr[idx--];
-	}
+    arr[idx++] = i;
+  }
+
+  T pop() {
+    if (idx == 0) {
+      throw std::runtime_error("stack empty");
+    }
+
+    return arr[--idx];
+  }
 
 private:
-	int idx = 0;
-	std::unique_ptr<T[]> arr;
+  size_t idx = 0;
+  size_t size = 3;
+  std::unique_ptr<T[]> arr;
 };
